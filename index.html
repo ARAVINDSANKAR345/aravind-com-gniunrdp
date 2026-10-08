@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ARAVIND.COM</title>
+
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#07070b;--panel:#111118;--panel2:#181820;--red:#ff304f;
+ --pink:#ff5d78;--text:#f5f5f7;--muted:#9999a8;--green:#35e58b;
+ --yellow:#ffd34e;--blue:#5ca9ff;
+}
+body{
+ margin:0;background:radial-gradient(circle at top,#24101a 0,#07070b 45%);
+ color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh;
+}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+ width:245px;background:#0d0d13;border-right:1px solid #272731;
+ padding:20px 12px;position:fixed;left:0;top:0;bottom:0;z-index:50;
+ overflow:auto;
+}
+.logo{font-size:24px;font-weight:900;padding:10px 12px 4px}
+.logo span{color:var(--red)}
+.tag{color:var(--muted);font-size:11px;padding:0 12px 18px}
+.nav button{
+ width:100%;background:transparent;color:#aaa9b5;text-align:left;
+ padding:12px;border-radius:12px;margin:3px 0;font-weight:700;
+}
+.nav button:hover,.nav button.active{background:#24121a;color:white}
+.nav button.active{box-shadow:inset 3px 0 var(--red)}
+.society{
+ margin-top:18px;padding:15px;background:linear-gradient(135deg,#25131a,#17131a);
+ border:1px solid #49232d;border-radius:16px;
+}
+.society b{display:block;margin-bottom:5px}.soon{color:var(--red);font-size:11px;font-weight:900}
+
+/* MAIN */
+.main{margin-left:245px;width:calc(100% - 245px);padding:28px;max-width:1500px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
+.top h1{margin:0;font-size:30px}
+.date{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{
+ background:linear-gradient(145deg,#15151d,#0e0e14);
+ border:1px solid #272731;border-radius:20px;padding:19px;
+ box-shadow:0 12px 35px #0004;
+}
+.span3{grid-column:span 3}.span4{grid-column:span 4}
+.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
+.card h2{font-size:16px;margin:0 0 14px}
+.big{font-size:34px;font-weight:900}.muted{color:var(--muted)}
+.red{color:var(--red)}.green{color:var(--green)}.yellow{color:var(--yellow)}
+.progress{height:9px;background:#282831;border-radius:99px;overflow:hidden;margin-top:12px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ff8b63);border-radius:99px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.btn{
+ background:#25252f;color:white;padding:10px 14px;border-radius:11px;font-weight:800;
+}
+.btn:hover{filter:brightness(1.2)}
+.btn.redbtn{background:var(--red)}
+.btn.greenbtn{background:#168b57}
+input,select{
+ background:#0b0b10;color:white;border:1px solid #30303a;border-radius:10px;
+ padding:10px;outline:none;width:100%;
+}
+label{font-size:12px;color:#aaa;display:block;margin:10px 0 5px}
+.statline{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #24242d}
+.page{display:none}.page.active{display:block}
+.hidden{display:none!important}
+
+/* CALENDAR */
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.calhead{color:#888;font-size:12px;text-align:center;padding:7px}
+.day{
+ min-height:72px;background:#111119;border:1px solid #24242d;border-radius:10px;
+ padding:8px;position:relative;
+}
+.day.today{border-color:var(--red);box-shadow:0 0 15px #ff304f22}
+.day .num{font-weight:800}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin:8px 3px 0 0}
+
+/* TIMER */
+.timer{
+ text-align:center;padding:25px;background:radial-gradient(circle,#29131a,#111118 65%);
+ border-radius:20px;
+}
+.timerTime{font-size:70px;font-weight:950;letter-spacing:3px}
+.timerMode{color:var(--red);font-weight:900;margin-bottom:8px}
+.timerCircle{max-width:380px;margin:auto}
+
+/* HABITS */
+.habit{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #25252e}
+.check{
+ width:28px;height:28px;border-radius:9px;background:#262630;color:white;
+}
+.check.done{background:var(--green);color:#07150e}
+
+/* GAME */
+.gamebox{text-align:center;min-height:280px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.gamebig{font-size:55px;font-weight:950;margin:15px}
+.gamegrid{display:grid;grid-template-columns:repeat(4,70px);gap:8px;margin:15px}
+.gamecell{
+ height:70px;background:#24242e;border-radius:13px;font-size:25px;font-weight:900;
+ display:flex;align-items:center;justify-content:center;
+}
+.gamecell:hover{background:#393945}
+.colorbtn{width:75px;height:75px;border-radius:15px;margin:5px}
+.scorepill{padding:7px 12px;background:#25252f;border-radius:20px;font-weight:800}
+
+/* TASKS */
+.task{
+ display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #25252d;
+}
+.task.done{text-decoration:line-through;color:#777}
+.del{margin-left:auto;color:#ff536a;background:none}
+
+/* ARAVII */
+#aravii{
+ position:fixed;right:25px;bottom:22px;width:125px;height:150px;z-index:100;
+ user-select:none;touch-action:none;cursor:grab;
+}
+#aravii.dragging{cursor:grabbing}
+.pet{
+ position:absolute;bottom:0;left:18px;width:88px;height:92px;
+ background:linear-gradient(145deg,#fff,#dfe4eb);border-radius:43% 43% 38% 38%;
+ box-shadow:0 12px 25px #0007;border:3px solid #c9ced7;
+}
+.ear{position:absolute;width:29px;height:34px;background:#dce1e8;top:-17px;border:3px solid #c9ced7}
+.ear.l{left:8px;transform:rotate(-28deg);border-radius:70% 30% 55% 30%}
+.ear.r{right:8px;transform:rotate(28deg);border-radius:30% 70% 30% 55%}
+.eye{
+ position:absolute;width:17px;height:22px;background:#101117;border-radius:50%;top:29px;
+}
+.eye:after{content:"";position:absolute;width:5px;height:6px;background:white;border-radius:50%;top:4px;left:4px}
+.eye.l{left:20px}.eye.r{right:20px}
+.mouth{position:absolute;left:37px;top:55px;width:14px;height:8px;border-bottom:3px solid #202027;border-radius:0 0 50% 50%}
+.nose{position:absolute;left:39px;top:49px;width:9px;height:7px;background:#ff7890;border-radius:60%}
+.foot{position:absolute;width:25px;height:14px;background:#d4d9e0;bottom:-5px;border-radius:50%}
+.foot.l{left:14px}.foot.r{right:14px}
+.spark{position:absolute;right:8px;bottom:28px;color:#ff304f;font-size:19px}
+.tail{position:absolute;width:35px;height:35px;border:8px solid #dfe4eb;border-left-color:transparent;border-radius:50%;right:-25px;bottom:23px;transform:rotate(-25deg)}
+.petBubble{
+ position:absolute;right:0;bottom:145px;background:white;color:#17171d;
+ padding:11px 14px;border-radius:16px 16px 3px 16px;width:210px;
+ font-size:13px;font-weight:800;box-shadow:0 8px 25px #0007;
+ opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s;
+}
+.petBubble.show{opacity:1;transform:translateY(0)}
+.petMenu{
+ position:absolute;right:0;bottom:105px;background:#15151d;border:1px solid #33333d;
+ padding:7px;border-radius:14px;display:none;width:130px;
+}
+.petMenu button{width:100%;padding:8px;background:transparent;color:white;text-align:left;border-radius:8px}
+.petMenu button:hover{background:#292932}
+.petName{
+ position:absolute;bottom:-20px;left:37px;background:#ff304f;padding:4px 9px;
+ border-radius:9px;font-size:10px;font-weight:900;
+}
+
+/* MOBILE */
+@media(max-width:850px){
+ .sidebar{width:70px;padding:10px 7px}.logo{font-size:14px;padding:10px 5px}
+ .tag,.society,.nav button span{display:none}
+ .nav button{text-align:center;font-size:20px;padding:12px 5px}
+ .main{margin-left:70px;width:calc(100% - 70px);padding:15px}
+ .span3,.span4,.span6,.span8{grid-column:span 12}
+ .timerTime{font-size:50px}
+ #aravii{right:10px;bottom:10px;transform:scale(.85);transform-origin:bottom right}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar">
+ <div class="logo">ARAVIND<span>OS</span></div>
+ <div class="tag">YOUR COMEBACK COMMAND CENTER</div>
+
+ <div class="nav">
+  <button class="active" onclick="page('dashboard',this)">🏠 <span>Dashboard</span></button>
+  <button onclick="page('calendar',this)">📅 <span>Calendar</span></button>
+  <button onclick="page('streak',this)">🔥 <span>Streak Tracker</span></button>
+  <button onclick="page('pomodoro',this)">⏱️ <span>Pomodoro</span></button>
+  <button onclick="page('games',this)">🎮 <span>Focus Games</span></button>
+  <button onclick="page('tasks',this)">✅ <span>Tasks</span></button>
+  <button onclick="page('goals',this)">🎯 <span>Goals</span></button>
+  <button onclick="page('habits',this)">🌱 <span>Habits</span></button>
+  <button onclick="page('study',this)">📚 <span>Study</span></button>
+  <button onclick="page('chess',this)">♟️ <span>Chess</span></button>
+  <button onclick="page('analytics',this)">📊 <span>Analytics</span></button>
+  <button onclick="page('achievements',this)">🏆 <span>Achievements</span></button>
+  <button onclick="page('lifemap',this)">🗺️ <span>Life Map</span></button>
+  <button onclick="page('notes',this)">🧠 <span>Brain Dump</span></button>
+  <button onclick="page('settings',this)">⚙️ <span>Settings</span></button>
+ </div>
+
+ <div class="society">
+  <b>🌐 ARAVINDOS SOCIETY</b>
+  <div class="soon">COMING SOON 🔒</div>
+ </div>
+</aside>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+ <div class="top">
+  <div><h1>Good morning, Aravind 👋</h1><div class="date" id="todayText"></div></div>
+  <button class="btn redbtn" onclick="showAravii('LOCK IN. ONE STEP NOW. ⚡')">⚡ LOCK IN</button>
+ </div>
+
+ <div class="grid">
+  <div class="card span3"><h2>🔥 Comeback</h2><div class="big red" id="dashComeback">0%</div><div class="progress"><i id="comeBar"></i></div></div>
+  <div class="card span3"><h2>⚡ XP / Level</h2><div class="big" id="dashXP">0</div><div class="muted" id="dashLevel">Level 1</div></div>
+  <div class="card span3"><h2>🔥 Streak</h2><div class="big yellow" id="dashStreak">0</div><div class="muted">days</div></div>
+  <div class="card span3"><h2>♟️ Chess</h2><div class="big" id="dashChess">1650</div><div class="muted">rating</div></div>
+
+  <div class="card span8">
+   <h2>🧠 ARAVII's Recommendation</h2>
+   <div id="recommend" class="big" style="font-size:24px">Finish one important task.</div>
+   <p class="muted">Don't think about the whole day. Just win the next move.</p>
+   <button class="btn redbtn" onclick="smartAction()">DO IT NOW →</button>
+  </div>
+
+  <div class="card span4">
+   <h2>📌 Today</h2>
+   <div class="statline"><span>Tasks</span><b id="taskCount">0</b></div>
+   <div class="statline"><span>Study mins</span><b id="studyCount">0</b></div>
+   <div class="statline"><span>Habits</span><b id="habitCount">0/5</b></div>
+  </div>
+
+  <div class="card span6">
+   <h2>🎯 Quick Actions</h2>
+   <div class="row">
+    <button class="btn" onclick="page('pomodoro')">⏱️ Start Pomodoro</button>
+    <button class="btn" onclick="page('games')">🎮 Focus Game</button>
+    <button class="btn" onclick="page('tasks')">➕ Add Task</button>
+   </div>
+  </div>
+
+  <div class="card span6">
+   <h2>⚔️ Boss Battle</h2>
+   <div id="bossName">No boss set</div>
+   <div class="progress"><i id="bossBar" style="width:0%"></i></div>
+   <div class="row" style="margin-top:12px">
+    <button class="btn redbtn" onclick="damageBoss()">⚔️ Attack</button>
+    <button class="btn" onclick="setBoss()">Set Boss</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- CALENDAR -->
+<section id="calendar" class="page">
+ <div class="top"><h1>📅 Calendar</h1><div class="row"><button class="btn" onclick="changeMonth(-1)">←</button><b id="monthTitle"></b><button class="btn" onclick="changeMonth(1)">→</button></div></div>
+ <div class="card">
+  <div class="calendar" id="calendarGrid"></div>
+ </div>
+</section>
+
+<!-- STREAK -->
+<section id="streak" class="page">
+ <div class="top"><h1>🔥 Streak Tracker</h1></div>
+ <div class="grid">
+  <div class="card span4"><h2>Current Streak</h2><div class="big yellow" id="streakBig">0 days</div><p class="muted">Keep showing up.</p></div>
+  <div class="card span4"><h2>Best Streak</h2><div class="big red" id="bestStreak">0</div></div>
+  <div class="card span4"><h2>Today</h2><button class="btn greenbtn" onclick="completeStreak()">🔥 Complete Today</button></div>
+  <div class="card span12"><h2>Last 30 Days</h2><div id="streakDots" class="row"></div></div>
+ </div>
+</section>
+
+<!-- POMODORO -->
+<section id="pomodoro" class="page">
+ <div class="top"><h1>⏱️ Pomodoro Focus</h1></div>
+ <div class="grid">
+  <div class="card span8">
+   <div class="timer">
+    <div class="timerMode" id="timerMode">FOCUS</div>
+    <div class="timerTime" id="timerDisplay">25:00</div>
+    <div class="timerCircle">
+     <div class="progress"><i id="timerBar" style="width:100%"></i></div>
+    </div>
+    <div class="row" style="justify-content:center;margin-top:20px">
+     <button class="btn redbtn" onclick="timerStart()">▶ Start</button>
+     <button class="btn" onclick="timerPause()">Ⅱ Pause</button>
+     <button class="btn" onclick="timerReset()">↻ Reset</button>
+    </div>
+    <div class="row" style="justify-content:center;margin-top:12px">
+     <button class="btn" onclick="setTimer(25)">25m</button>
+     <button class="btn" onclick="setTimer(50)">50m</button>
+     <button class="btn" onclick="setTimer(5,true)">5m Break</button>
+    </div>
+   </div>
+  </div>
+  <div class="card span4">
+   <h2>🍅 Sessions</h2>
+   <div class="big" id="pomCount">0</div>
+   <div class="muted">completed today</div>
+   <hr style="border-color:#25252d;margin:20px 0">
+   <div class="muted">Rule: During focus → no Reels, Shorts, games or random scrolling.</div>
+  </div>
+ </div>
+</section>
+
+<!-- GAMES -->
+<section id="games" class="page">
+ <div class="top"><h1>🎮 Focus Games</h1><span class="scorepill">Best: <b id="gameBest">0</b></span></div>
+ <div class="grid">
+  <div class="card span12">
+   <div class="row">
+    <button class="btn redbtn" onclick="game('reaction')">⚡ Reaction</button>
+    <button class="btn" onclick="game('memory')">🧠 Memory</button>
+    <button class="btn" onclick="game('number')">🔢 Number Rush</button>
+    <button class="btn" onclick="game('color')">🎨 Color Match</button>
+    <button class="btn" onclick="game('stroop')">👀 Stroop</button>
+    <button class="btn" onclick="game('math')">➗ Math Blitz</button>
+    <button class="btn" onclick="game('pattern')">🧩 Pattern</button>
+    <button class="btn" onclick="game('tap')">🎯 Quick Tap</button>
+    <button class="btn" onclick="game('hold')">🧘 Focus Hold</button>
+    <button class="btn" onclick="game('chess')">♟️ Chess Tactics</button>
+   </div>
+  </div>
+  <div class="card span12">
+   <div id="gameArea" class="gamebox">
+    <div class="gamebig">🎮</div>
+    <h2>Choose a game</h2>
+    <p class="muted">Train your brain for 60 seconds.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- TASKS -->
+<section id="tasks" class="page">
+ <div class="top"><h1>✅ Tasks</h1></div>
+ <div class="grid">
+  <div class="card span4">
+   <h2>Add Task</h2>
+   <input id="taskInput" placeholder="e.g. Maths Lesson 3 sums">
+   <button class="btn redbtn" style="margin-top:10px" onclick="addTask()">Add Task</button>
+  </div>
+  <div class="card span8"><h2>Today's Tasks</h2><div id="taskList"></div></div>
+ </div>
+</section>
+
+<!-- GOALS -->
+<section id="goals" class="page">
+ <div class="top"><h1>🎯 Goals</h1></div>
+ <div class="card">
+  <div class="row"><input id="goalInput" placeholder="Enter a goal"><button class="btn redbtn" onclick="addGoal()">Add</button></div>
+  <div id="goalList"></div>
+ </div>
+</section>
+
+<!-- HABITS -->
+<section id="habits" class="page">
+ <div class="top"><h1>🌱 Healthy Habits</h1></div>
+ <div class="card"><div id="habitList"></div></div>
+</section>
+
+<!-- STUDY -->
+<section id="study" class="page">
+ <div class="top"><h1>📚 Study Command Center</h1></div>
+ <div class="grid">
+  <div class="card span4">
+   <h2>Log Study</h2>
+   <select id="studySubject">
+    <option>Maths</option><option>Science</option><option>Social Science</option>
+    <option>English</option><option>Tamil</option><option>Other</option>
+   </select>
+   <input id="studyMinutes" type="number" placeholder="Minutes" style="margin-top:8px">
+   <button class="btn redbtn" style="margin-top:8px" onclick="logStudy()">Log Session</button>
+  </div>
+  <div class="card span8">
+   <h2>Today's Study</h2>
+   <div class="big" id="studyTotal">0 min</div>
+   <div id="studyLog"></div>
+  </div>
+ </div>
+</section>
+
+<!-- CHESS -->
+<section id="chess" class="page">
+ <div class="top"><h1>♟️ Chess Tracker</h1></div>
+ <div class="grid">
+  <div class="card span4">
+   <h2>Current Rating</h2>
+   <div class="big red" id="rating">1650</div>
+   <input id="newRating" type="number" placeholder="New rating" style="margin-top:10px">
+   <button class="btn redbtn" style="margin-top:8px" onclick="updateRating()">Update</button>
+  </div>
+  <div class="card span8">
+   <h2>Rating Goal: 2000+</h2>
+   <div class="progress"><i id="ratingBar"></i></div>
+   <p class="muted" id="ratingText"></p>
+  </div>
+ </div>
+</section>
+
+<!-- ANALYTICS -->
+<section id="analytics" class="page">
+ <div class="top"><h1>📊 Analytics</h1></div>
+ <div class="grid">
+  <div class="card span3"><h2>Study</h2><div class="big" id="aStudy">0</div><div class="muted">minutes</div></div>
+  <div class="card span3"><h2>Tasks</h2><div class="big" id="aTasks">0</div><div class="muted">completed</div></div>
+  <div class="card span3"><h2>Pomodoros</h2><div class="big" id="aPom">0</div></div>
+  <div class="card span3"><h2>Games</h2><div class="big" id="aGames">0</div></div>
+  <div class="card span12">
+   <h2>⚡ Comeback Formula</h2>
+   <div class="statline"><span>Study consistency</span><b id="an1">0%</b></div>
+   <div class="statline"><span>Task completion</span><b id="an2">0%</b></div>
+   <div class="statline"><span>Habit completion</span><b id="an3">0%</b></div>
+   <div class="statline"><span>Overall</span><b class="red" id="an4">0%</b></div>
+  </div>
+ </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="page">
+ <div class="top"><h1>🏆 Achievements</h1></div>
+ <div class="grid" id="achievementList"></div>
+</section>
+
+<!-- LIFE MAP -->
+<section id="lifemap" class="page">
+ <div class="top"><h1>🗺️ ARAVINDOS Life Map</h1></div>
+ <div class="card">
+  <h2>Your journey</h2>
+  <div class="statline"><span>📚 Academic Comeback</span><b>IN PROGRESS</b></div>
+  <div class="statline"><span>♟️ Chess 2000+</span><b>IN PROGRESS</b></div>
+  <div class="statline"><span>💪 Discipline</span><b>BUILDING</b></div>
+  <div class="statline"><span>🧠 Focus</span><b>BUILDING</b></div>
+  <div class="statline"><span>🌐 ARAVINDOS Society</span><b class="red">COMING SOON</b></div>
+ </div>
+</section>
+
+<!-- NOTES -->
+<section id="notes" class="page">
+ <div class="top"><h1>🧠 Brain Dump</h1></div>
+ <div class="card">
+  <textarea id="notesBox" style="width:100%;min-height:300px;background:#0b0b10;color:white;border:1px solid #30303a;border-radius:12px;padding:15px" placeholder="Anything in your mind..."></textarea>
+  <button class="btn redbtn" style="margin-top:10px" onclick="saveNotes()">Save Notes</button>
+ </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="page">
+ <div class="top"><h1>⚙️ Settings</h1></div>
+ <div class="grid">
+  <div class="card span6">
+   <h2>💾 Data</h2>
+   <button class="btn" onclick="exportData()">Export Backup</button>
+   <button class="btn" onclick="importData()">Import Backup</button>
+  </div>
+  <div class="card span6">
+   <h2>☢️ Danger Zone</h2>
+   <button class="btn redbtn" onclick="resetAll()">Factory Reset</button>
+  </div>
+ </div>
+</section>
+
+</main>
+</div>
+
+<!-- ARAVII -->
+<div id="aravii">
+ <div class="petBubble" id="petBubble">Hey! I'm ARAVII 🐾</div>
+ <div class="petMenu" id="petMenu">
+  <button onclick="talk()">💬 Talk</button>
+  <button onclick="petPet()">❤️ Pet</button>
+  <button onclick="roam()">✨ Roam</button>
+  <button onclick="hidePet()">👻 Hide</button>
+ </div>
+ <div class="pet" id="pet">
+  <div class="ear l"></div><div class="ear r"></div>
+  <div class="eye l"></div><div class="eye r"></div>
+  <div class="nose"></div><div class="mouth"></div>
+  <div class="foot l"></div><div class="foot r"></div>
+  <div class="tail"></div><div class="spark">⚡</div>
+ </div>
+ <div class="petName">ARAVII</div>
+</div>
+
+<script>
+/* =========================
+   ARAVINDOS DATA
+========================= */
+const KEY="ARAVINDOS_FINAL_V1";
+
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||{
+ xp:0,rating:1650,streak:0,bestStreak:0,lastStreak:"",
+ tasks:[],goals:[],study:[],pom:0,games:0,
+ habits:{Water:false,Walk:false,"No Junk":false,Meditation:false,"No Doomscroll":false},
+ habitDates:{},doneDates:{},notes:"",
+ boss:{name:"",hp:100,max:100},
+ gameBest:0
+};
+
+function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
+function today(){return new Date().toISOString().slice(0,10)}
+function addXP(n){data.xp+=n;save();showAravii("+"+n+" XP! 🔥")}
+function level(){return Math.floor(data.xp/100)+1}
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+function page(id,btn){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ renderAll();
+ window.scrollTo(0,0);
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+function comeback(){
+ let t=data.tasks.length;
+ let done=data.tasks.filter(x=>x.done).length;
+ let s=Math.min(data.study.reduce((a,b)=>a+b.min,0)/120*100,100);
+ let h=Object.values(data.habits).filter(Boolean).length/5*100;
+ return Math.round((t?done/t*100:0+s+h)/3);
+}
+
+function smartAction(){
+ let undone=data.tasks.find(x=>!x.done);
+ if(undone){
+  showAravii("GO: "+undone.text+" ⚡");
+  page("tasks");
+ }else if(data.study.reduce((a,b)=>a+b.min,0)<60){
+  showAravii("Study 25 minutes. That's your next move. 📚");
+  page("pomodoro");
+ }else{
+  showAravii("Play one focus game and sharpen your brain! 🎮");
+  page("games");
+ }
+}
+
+/* =========================
+   TASKS
+========================= */
+function addTask(){
+ let x=document.getElementById("taskInput").value.trim();
+ if(!x)return;
+ data.tasks.push({text:x,done:false,date:today()});
+ document.getElementById("taskInput").value="";
+ addXP(10);save();
+}
+function toggleTask(i){
+ data.tasks[i].done=!data.tasks[i].done;
+ if(data.tasks[i].done){data.xp+=20;markDate()}
+ save();
+}
+function deleteTask(i){data.tasks.splice(i,1);save()}
+
+/* =========================
+   GOALS
+========================= */
+function addGoal(){
+ let x=document.getElementById("goalInput").value.trim();
+ if(!x)return;
+ data.goals.push({text:x,done:false});
+ document.getElementById("goalInput").value="";
+ addXP(10);save();
+}
+function toggleGoal(i){data.goals[i].done=!data.goals[i].done;if(data.goals[i].done)data.xp+=30;save()}
+
+/* =========================
+   STUDY
+========================= */
+function logStudy(){
+ let subject=document.getElementById("studySubject").value;
+ let min=Number(document.getElementById("studyMinutes").value);
+ if(!min||min<1)return;
+ data.study.push({subject,min,date:today()});
+ data.xp+=Math.round(min/5);
+ document.getElementById("studyMinutes").value="";
+ markDate();save();showAravii(min+" minutes! Massive W. 📚🔥");
+}
+
+/* =========================
+   HABITS
+========================= */
+function toggleHabit(h){
+ data.habits[h]=!data.habits[h];
+ if(data.habits[h])data.xp+=10;
+ save();
+}
+
+/* =========================
+   STREAK
+========================= */
+function completeStreak(){
+ let t=today();
+ if(data.lastStreak===t){showAravii("Already completed today 😎");return}
+ let y=new Date();y.setDate(y.getDate()-1);
+ let ys=y.toISOString().slice(0,10);
+ data.streak=data.lastStreak===ys?data.streak+1:1;
+ data.bestStreak=Math.max(data.bestStreak,data.streak);
+ data.lastStreak=t;data.doneDates[t]=true;data.xp+=25;
+ save();showAravii(data.streak+" DAY STREAK! 🔥🔥");
+}
+function markDate(){data.doneDates[today()]=true}
+
+/* =========================
+   CALENDAR
+========================= */
+let calDate=new Date();
+function changeMonth(n){calDate.setMonth(calDate.getMonth()+n);renderCalendar()}
+function renderCalendar(){
+ let y=calDate.getFullYear(),m=calDate.getMonth();
+ document.getElementById("monthTitle").textContent=new Date(y,m,1).toLocaleString("en",{month:"long",year:"numeric"});
+ let first=new Date(y,m,1).getDay();
+ let days=new Date(y,m+1,0).getDate();
+ let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(x=>`<div class="calhead">${x}</div>`).join("");
+ for(let i=0;i<first;i++)html+=`<div></div>`;
+ for(let d=1;d<=days;d++){
+  let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+  let ist=key===today();
+  html+=`<div class="day ${ist?"today":""}">
+   <div class="num">${d}</div>
+   ${data.doneDates[key]?'<span class="dot"></span>':''}
+  </div>`;
+ }
+ document.getElementById("calendarGrid").innerHTML=html;
+}
+
+/* =========================
+   POMODORO
+========================= */
+let timerSec=1500,timerTotal=1500,timerRunning=false,timerInt=null;
+function setTimer(min,br=false){
+ clearInterval(timerInt);timerRunning=false;
+ timerSec=min*60;timerTotal=timerSec;
+ document.getElementById("timerMode").textContent=br?"BREAK":"FOCUS";
+ renderTimer();
+}
+function timerStart(){
+ if(timerRunning)return;
+ timerRunning=true;
+ timerInt=setInterval(()=>{
+  timerSec--;
+  if(timerSec<=0){
+   clearInterval(timerInt);timerRunning=false;
+   if(document.getElementById("timerMode").textContent==="FOCUS"){
+    data.pom++;data.xp+=50;save();showAravii("FOCUS SESSION COMPLETE! 🍅🔥");
+    setTimer(5,true);
+   }else setTimer(25);
+  }
+  renderTimer();
+ },1000);
+}
+function timerPause(){clearInterval(timerInt);timerRunning=false}
+function timerReset(){setTimer(document.getElementById("timerMode").textContent==="BREAK"?5:25)}
+function renderTimer(){
+ let m=Math.floor(timerSec/60),s=timerSec%60;
+ document.getElementById("timerDisplay").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+ document.getElementById("timerBar").style.width=(timerSec/timerTotal*100)+"%";
+}
+
+/* =========================
+   BOSS
+========================= */
+function setBoss(){
+ let n=prompt("Boss name?");
+ if(!n)return;
+ data.boss={name:n,hp:100,max:100};save();
+}
+function damageBoss(){
+ if(!data.boss.name){setBoss();return}
+ data.boss.hp=Math.max(0,data.boss.hp-20);data.xp+=15;
+ if(data.boss.hp===0){showAravii("BOSS DEFEATED! 🏆⚔️");data.boss.name=""}
+ save();
+}
+
+/* =========================
+   CHESS
+========================= */
+function updateRating(){
+ let n=Number(document.getElementById("newRating").value);
+ if(!n)return;
+ data.rating=n;data.xp+=20;save();showAravii("Chess rating updated! ♟️");
+}
+
+/* =========================
+   NOTES
+========================= */
+function saveNotes(){data.notes=document.getElementById("notesBox").value;save();showAravii("Brain dump saved 🧠")}
+
+/* =========================
+   FOCUS GAMES
+========================= */
+let gameTimer=null,gameState={};
+
+function game(type){
+ clearTimeout(gameTimer);
+ const a=document.getElementById("gameArea");
+
+ if(type==="reaction"){
+  a.innerHTML=`<h2>⚡ Reaction Test</h2><p>Wait until GREEN, then click.</p><button id="reactBtn" class="btn redbtn" style="padding:30px 60px">WAIT...</button>`;
+  let start;
+  setTimeout(()=>{
+   let b=document.getElementById("reactBtn");b.style.background="#25d978";b.textContent="CLICK!";
+   start=performance.now();b.onclick=()=>finishGame(Math.round(performance.now()-start),1000);
+  },1500+Math.random()*2500);
+ }
+
+ if(type==="memory"){
+  let nums=Array.from({length:6},()=>Math.floor(Math.random()*9));
+  a.innerHTML=`<h2>🧠 Memory</h2><div class="gamebig" id="mem">${nums.join(" ")}</div><input id="memInput" placeholder="Type numbers in order"><button class="btn redbtn" onclick="checkMemory('${nums.join('')}')">Check</button>`;
+  setTimeout(()=>document.getElementById("mem").textContent="???",1800);
+ }
+
+ if(type==="number"){
+  let n=Math.floor(Math.random()*40)+20;
+  a.innerHTML=`<h2>🔢 Number Rush</h2><div class="gamebig">${n}</div><p>Is it PRIME?</p><button class="btn" onclick="numberAnswer(true,${n})">YES</button> <button class="btn" onclick="numberAnswer(false,${n})">NO</button>`;
+ }
+
+ if(type==="color"){
+  let cols=["red","blue","green","yellow"];
+  let target=cols[Math.floor(Math.random()*4)];
+  a.innerHTML=`<h2>🎨 Color Match</h2><div class="gamebig">${target.toUpperCase()}</div><p>Click the matching color.</p>${cols.map(c=>`<button class="colorbtn" style="background:${c}" onclick="colorAnswer('${c}','${target}')"></button>`).join("")}`;
+ }
+
+ if(type==="stroop"){
+  let word=["RED","BLUE","GREEN","YELLOW"][Math.floor(Math.random()*4)];
+  let colors=["red","blue","green","yellow"];
+  let actual=colors[Math.floor(Math.random()*4)];
+  a.innerHTML=`<h2>👀 Stroop</h2><div class="gamebig" style="color:${actual}">${word}</div><p>What COLOR is the text?</p>${colors.map(c=>`<button class="btn" onclick="colorAnswer('${c}','${actual}')">${c}</button>`).join(" ")}`;
+ }
+
+ if(type==="math"){
+  let x=Math.floor(Math.random()*20)+1,y=Math.floor(Math.random()*20)+1,ans=x+y;
+  a.innerHTML=`<h2>➗ Math Blitz</h2><div class="gamebig">${x} + ${y} = ?</div><input id="mathAns" type="number"><button class="btn redbtn" onclick="mathAnswer(${ans})">Check</button>`;
+ }
+
+ if(type==="pattern"){
+  let seq=[2,4,6,8];
+  a.innerHTML=`<h2>🧩 Pattern Recall</h2><div class="gamebig">${seq.join(" → ")} → ?</div><input id="pat" type="number"><button class="btn redbtn" onclick="patternAnswer(10)">Check</button>`;
+ }
+
+ if(type==="tap"){
+  let count=0;
+  a.innerHTML=`<h2>🎯 Quick Tap</h2><p>Tap as many times as possible in 10 seconds!</p><button id="tapBtn" class="btn redbtn" style="padding:30px 70px;font-size:30px">0</button>`;
+  let b=document.getElementById("tapBtn");b.onclick=()=>{count++;b.textContent=count};
+  setTimeout(()=>finishGame(count,Math.max(100,count*20)),10000);
+ }
+
+ if(type==="hold"){
+  a.innerHTML=`<h2>🧘 Focus Hold</h2><p>Keep the button pressed for 5 seconds.</p><button id="holdBtn" class="btn redbtn" style="padding:30px 70px">HOLD</button>`;
+  let b=document.getElementById("holdBtn"),st=0;
+  b.onpointerdown=()=>{st=Date.now();b.textContent="KEEP HOLDING..."};
+  b.onpointerup=()=>{let t=(Date.now()-st)/1000;finishGame(Math.round(t*20),100);b.textContent="HOLD"};
+ }
+
+ if(type==="chess"){
+  let qs=[
+   ["White to move. What wins material?","Fork"],
+   ["What is the most important opening principle?","Development"],
+   ["What does checkmate mean?","King cannot escape check"],
+   ["What is a pin?","Piece cannot move without exposing king"]
+  ];
+  let q=qs[Math.floor(Math.random()*qs.length)];
+  a.innerHTML=`<h2>♟️ Chess Tactics</h2><div class="gamebig" style="font-size:25px">${q[0]}</div><input id="chessAns" placeholder="Your answer"><button class="btn redbtn" onclick="chessAnswer('${q[1]}')">Check</button>`;
+ }
+}
+function finishGame(score,xp){
+ data.games++;data.xp+=Math.max(10,Math.round(xp/20));
+ data.gameBest=Math.max(data.gameBest,score);
+ save();showAravii("Nice! Brain XP earned 🧠⚡");
+ document.getElementById("gameArea").innerHTML=`<div class="gamebig">🏆</div><h2>Score: ${score}</h2><button class="btn redbtn" onclick="game('reaction')">Play Again</button>`;
+}
+function checkMemory(ans){
+ let x=document.getElementById("memInput").value.replace(/\s/g,"");
+ finishGame(x===ans?100:20,x===ans?150:20);
+}
+function prime(n){if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true}
+function numberAnswer(a,n){finishGame(a===prime(n)?100:0,a===prime(n)?100:10)}
+function colorAnswer(a,b){finishGame(a===b?100:0,a===b?100:10)}
+function mathAnswer(a){let x=Number(document.getElementById("mathAns").value);finishGame(x===a?100:0,x===a?120:10)}
+function patternAnswer(a){let x=Number(document.getElementById("pat").value);finishGame(x===a?100:0,x===a?120:10)}
+function chessAnswer(ans){let x=document.getElementById("chessAns").value.toLowerCase();finishGame(x.includes(ans.toLowerCase())?100:0,x.includes(ans.toLowerCase())?120:10)}
+
+/* =========================
+   ARAVII
+========================= */
+const messages=[
+ "You don't need motivation. Start. ⚡",
+ "One focused session = one W. 🔥",
+ "I'm watching your comeback 😎",
+ "Phone down. Brain on. 🧠",
+ "Small progress still counts.",
+ "Let's defeat today's boss! ⚔️",
+ "2000 chess + topper comeback. One move at a time. ♟️",
+ "No zero days. 🔥"
+];
+function showAravii(msg){
+ let b=document.getElementById("petBubble");
+ b.textContent=msg;b.classList.add("show");
+ clearTimeout(window.petTimeout);
+ window.petTimeout=setTimeout(()=>b.classList.remove("show"),3500);
+}
+function talk(){showAravii(messages[Math.floor(Math.random()*messages.length)]);document.getElementById("petMenu").style.display="none"}
+function petPet(){data.xp+=5;save();showAravii("Hehe 😭❤️ ARAVII liked that! +5 XP");document.getElementById("petMenu").style.display="none"}
+function roam(){
+ let p=document.getElementById("aravii");
+ p.style.right=Math.max(5,Math.random()*(window.innerWidth-160))+"px";
+ p.style.bottom=Math.max(5,Math.random()*(window.innerHeight-190))+"px";
+ showAravii("ARAVII ROAMING ✨");
+ document.getElementById("petMenu").style.display="none";
+}
+function hidePet(){
+ document.getElementById("aravii").style.display="none";
+}
+document.getElementById("aravii").addEventListener("contextmenu",e=>{
+ e.preventDefault();
+ let m=document.getElementById("petMenu");
+ m.style.display=m.style.display==="block"?"none":"block";
+});
+
+/* DRAG ARAVII */
+let dragging=false,ox=0,oy=0;
+const petEl=document.getElementById("aravii");
+petEl.addEventListener("pointerdown",e=>{
+ if(e.button!==0)return;
+ dragging=true;petEl.classList.add("dragging");
+ let r=petEl.getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top;
+ petEl.setPointerCapture(e.pointerId);
+});
+petEl.addEventListener("pointermove",e=>{
+ if(!dragging)return;
+ petEl.style.left=Math.max(0,Math.min(window.innerWidth-130,e.clientX-ox))+"px";
+ petEl.style.top=Math.max(0,Math.min(window.innerHeight-160,e.clientY-oy))+"px";
+ petEl.style.right="auto";petEl.style.bottom="auto";
+});
+petEl.addEventListener("pointerup",()=>{dragging=false;petEl.classList.remove("dragging")});
+
+/* =========================
+   EXPORT / IMPORT
+========================= */
+function exportData(){
+ let blob=new Blob([JSON.stringify(data)],{type:"application/json"});
+ let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="aravindos-backup.json";a.click();
+}
+function importData(){
+ let inp=document.createElement("input");inp.type="file";inp.accept=".json";
+ inp.onchange=()=>{let r=new FileReader();r.onload=()=>{data=JSON.parse(r.result);save()};r.readAsText(inp.files[0])};inp.click();
+}
+function resetAll(){
+ if(confirm("Factory reset ARAVINDOS?")){localStorage.removeItem(KEY);location.reload()}
+}
+
+/* =========================
+   RENDER
+========================= */
+function renderAll(){
+ let c=comeback();
+ document.getElementById("dashComeback").textContent=c+"%";
+ document.getElementById("comeBar").style.width=c+"%";
+ document.getElementById("dashXP").textContent=data.xp;
+ document.getElementById("dashLevel").textContent="Level "+level();
+ document.getElementById("dashStreak").textContent=data.streak;
+ document.getElementById("streakBig").textContent=data.streak+" days";
+ document.getElementById("bestStreak").textContent=data.bestStreak;
+ document.getElementById("dashChess").textContent=data.rating;
+ document.getElementById("rating").textContent=data.rating;
+ document.getElementById("taskCount").textContent=data.tasks.filter(x=>!x.done).length;
+ document.getElementById("studyCount").textContent=data.study.reduce((a,b)=>a+b.min,0);
+ document.getElementById("habitCount").textContent=Object.values(data.habits).filter(Boolean).length+"/5";
+ document.getElementById("pomCount").textContent=data.pom;
+ document.getElementById("gameBest").textContent=data.gameBest;
+ document.getElementById("aStudy").textContent=data.study.reduce((a,b)=>a+b.min,0);
+ document.getElementById("aTasks").textContent=data.tasks.filter(x=>x.done).length;
+ document.getElementById("aPom").textContent=data.pom;
+ document.getElementById("aGames").textContent=data.games;
+ document.getElementById("ratingBar").style.width=Math.min(100,Math.max(0,(data.rating-1000)/10))+"%";
+ document.getElementById("ratingText").textContent=(2000-data.rating)+" rating points to 2000.";
+ document.getElementById("bossName").textContent=data.boss.name?`⚔️ ${data.boss.name} — ${data.boss.hp}/${data.boss.max} HP`:"No boss set";
+ document.getElementById("bossBar").style.width=(data.boss.hp/data.boss.max*100)+"%";
+ document.getElementById("notesBox").value=data.notes||"";
+ renderTasks();renderGoals();renderHabits();renderStudy();renderStreak();renderAchievements();renderCalendar();
+ document.getElementById("recommend").textContent=getRecommendation();
+ let h=Object.values(data.habits).filter(Boolean).length;
+ let study=Math.min(100,data.study.reduce((a,b)=>a+b.min,0)/60*100);
+ let tasks=data.tasks.length?data.tasks.filter(x=>x.done).length/data.tasks.length*100:0;
+ document.getElementById("an1").textContent=Math.round(study)+"%";
+ document.getElementById("an2").textContent=Math.round(tasks)+"%";
+ document.getElementById("an3").textContent=Math.round(h/5*100)+"%";
+ document.getElementById("an4").textContent=c+"%";
+}
+function getRecommendation(){
+ let t=data.tasks.find(x=>!x.done);
+ if(t)return "⚡ "+t.text;
+ if(data.study.reduce((a,b)=>a+b.min,0)<60)return "📚 Start a 25-minute study session";
+ if(Object.values(data.habits).some(x=>!x))return "🌱 Complete one healthy habit";
+ return "🎮 Play one focus game";
+}
+function renderTasks(){
+ document.getElementById("taskList").innerHTML=data.tasks.length?data.tasks.map((x,i)=>`
+ <div class="task ${x.done?"done":""}">
+ <button class="check ${x.done?"done":""}" onclick="toggleTask(${i})">${x.done?"✓":""}</button>
+ <span>${escapeHTML(x.text)}</span><button class="del" onclick="deleteTask(${i})">✕</button>
+ </div>`).join(""):`<p class="muted">No tasks. Add your first mission.</p>`;
+}
+function renderGoals(){
+ document.getElementById("goalList").innerHTML=data.goals.map((x,i)=>`
+ <div class="task ${x.done?"done":""}">
+ <button class="check ${x.done?"done":""}" onclick="toggleGoal(${i})">${x.done?"✓":""}</button>
+ <span>${escapeHTML(x.text)}</span>
+ </div>`).join("");
+}
+function renderHabits(){
+ document.getElementById("habitList").innerHTML=Object.keys(data.habits).map(h=>`
+ <div class="habit"><span>${h}</span><button class="check ${data.habits[h]?"done":""}" onclick="toggleHabit('${h}')">${data.habits[h]?"✓":""}</button></div>`).join("");
+}
+function renderStudy(){
+ let total=data.study.reduce((a,b)=>a+b.min,0);
+ document.getElementById("studyTotal").textContent=total+" min";
+ document.getElementById("studyLog").innerHTML=data.study.slice().reverse().map(x=>`<div class="statline"><span>${x.subject}</span><b>${x.min} min</b></div>`).join("");
+}
+function renderStreak(){
+ let out="";
+ for(let i=29;i>=0;i--){
+  let d=new Date();d.setDate(d.getDate()-i);
+  let k=d.toISOString().slice(0,10);
+  out+=`<span title="${k}" style="width:25px;height:25px;border-radius:7px;background:${data.doneDates[k]?"#35e58b":"#292932"}"></span>`;
+ }
+ document.getElementById("streakDots").innerHTML=out;
+}
+function renderAchievements(){
+ let arr=[
+  ["🔥 First Step",data.xp>=10,"Earn 10 XP"],
+  ["📚 Scholar",data.study.reduce((a,b)=>a+b.min,0)>=60,"Study 60 minutes"],
+  ["🍅 Focus Master",data.pom>=5,"Complete 5 Pomodoros"],
+  ["🔥 7 Day Warrior",data.bestStreak>=7,"Reach a 7-day streak"],
+  ["🎮 Brain Trainer",data.games>=10,"Play 10 games"],
+  ["♟️ Chess Climber",data.rating>=1700,"Reach 1700 rating"],
+  ["🏆 2000 Vision",data.rating>=2000,"Reach 2000 rating"]
+ ];
+ document.getElementById("achievementList").innerHTML=arr.map(x=>`
+ <div class="card span4" style="opacity:${x[1]?1:.45}">
+  <h2>${x[0]} ${x[1]?"✓":"🔒"}</h2><p class="muted">${x[2]}</p>
+ </div>`).join("");
+}
+function escapeHTML(s){
+ return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+/* =========================
+   STARTUP
+========================= */
+document.getElementById("todayText").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+renderAll();
+renderTimer();
+
+/* ARAVII auto talk */
+setTimeout(()=>showAravii("Hey Aravind! I'm ARAVII 🐾 Let's make today count."),1200);
+</script>
+</body>
+</html>
+
+
+     
